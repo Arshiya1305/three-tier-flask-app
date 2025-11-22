@@ -1,0 +1,4 @@
+- hosts: flask_servers
+  become: yes
+  roles:
+    - flask_app

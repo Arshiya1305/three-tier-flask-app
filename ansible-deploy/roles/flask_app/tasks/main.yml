@@ -1,0 +1,55 @@
+---
+# Install system packages
+- name: Install required packages
+  apt:
+    name:
+      - python3
+      - python3-pip
+      - python3-venv
+    update_cache: yes
+    state: present
+
+# Copy Flask application
+- name: Copy Flask application
+  copy:
+    src: three_tier_flask_app/
+    dest: /var/www/three_tier_flask_app/
+    mode: "0755"
+
+# Create virtual environment
+- name: Create virtual environment
+  command: python3 -m venv /var/www/three_tier_flask_app/venv
+  args:
+    creates: /var/www/three_tier_flask_app/venv
+
+# Install dependencies
+- name: Install dependencies
+  pip:
+    requirements: /var/www/three_tier_flask_app/requirements.txt
+    virtualenv: /var/www/three_tier_flask_app/venv
+
+# Create systemd service
+- name: Create Flask systemd service
+  copy:
+    dest: /etc/systemd/system/flask.service
+    content: |
+      [Unit]
+      Description=Flask App
+      After=network.target
+
+      [Service]
+      User=root
+      WorkingDirectory=/var/www/three_tier_flask_app
+      ExecStart=/var/www/three_tier_flask_app/venv/bin/python run.py
+      Restart=always
+
+      [Install]
+      WantedBy=multi-user.target
+
+# Start and enable service
+- name: Start Flask app
+  systemd:
+    name: flask
+    enabled: yes
+    state: started
+
