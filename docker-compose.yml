@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  web:
+    image: three-tier-flask
+    ports:
+      - "8000:5000"
+    restart: always
+

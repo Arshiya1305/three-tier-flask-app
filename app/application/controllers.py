@@ -1,5 +1,5 @@
-from .services import generate_message
+from app.data.models import Item
 
 def get_home_message():
-    return generate_message()
+    return Item.query.all()
 

@@ -1,9 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>3 Tier Flask App</title>
+    <title>3-Tier Flask App</title>
 </head>
 <body>
-<h1>{{ message }}</h1>
+    <h1>Items in Database</h1>
+
+    {% if items %}
+        <ul>
+        {% for item in items %}
+            <li><strong>{{ item.name }}</strong>: {{ item.description }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No items found.</p>
+    {% endif %}
 </body>
 </html>
+
